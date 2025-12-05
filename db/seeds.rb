@@ -7,3 +7,30 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+Property.create([
+  {
+    name: "4 Person Villa",
+    headline: "4 Person Villa",
+    description: "It is a beautiful4 Person Villa on the beachfront with a pool and a garden.",
+    address_1: "123, Baga Beach, Panaji",
+    address_2: "Apt 1",
+    city: "Panaji",
+    state: "Goa",
+    country: "India"
+  }
+ ])
+
+ 
+Property.create([
+    {
+      name: "2 Person Villa",
+      headline: "2 Person Villa",
+      description: "It is a beautiful 2 Person Villa on the beachfront with a pool and a garden.",
+      address_1: "123, Calangute Beach, Calangute",
+      address_2: "Apt 1",
+      city: "Calangute",
+      state: "Goa",
+      country: "India"
+    }
+   ])
