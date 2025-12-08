@@ -8,29 +8,21 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Property.create([
-  {
-    name: "4 Person Villa",
-    headline: "4 Person Villa",
-    description: "It is a beautiful4 Person Villa on the beachfront with a pool and a garden.",
-    address_1: "123, Baga Beach, Panaji",
-    address_2: "Apt 1",
-    city: "Panaji",
-    state: "Goa",
-    country: "India"
-  }
- ])
+# Set Faker locale to English
+Faker::Config.locale = 'en'
 
- 
-Property.create([
-    {
-      name: "2 Person Villa",
-      headline: "2 Person Villa",
-      description: "It is a beautiful 2 Person Villa on the beachfront with a pool and a garden.",
-      address_1: "123, Calangute Beach, Calangute",
-      address_2: "Apt 1",
-      city: "Calangute",
-      state: "Goa",
-      country: "India"
-    }
-   ])
+6.times do |i|
+   property =  Property.create({
+      name: Faker::Address.full_address,
+      description: Faker::Lorem.paragraph(sentence_count: 10),
+      headline: Faker::Lorem.unique.sentence(word_count: 6),
+      address_1: Faker::Address.street_address,
+      address_2: Faker::Address.street_name,
+      city: Faker::Address.city,
+      state: Faker::Address.state,
+      country: Faker::Address.country,
+      price: Money.from_amount((50..100).to_a.sample, 'USD')
+    })
+    property.images.attach(io: File.open("db/images/property_#{i+1}.jpeg"), filename: property.name)
+    property.images.attach(io: File.open("db/images/property_#{i+7}.jpeg"), filename: property.name)
+  end
