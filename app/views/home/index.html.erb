@@ -6,19 +6,23 @@
     <% @properties.each do |property| %>
       <div class="group relative">
         <!-- Slider main container -->
-<div class="swiper aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-  <!-- Additional required wrapper -->
-  <div class="swiper-wrapper">
-    <!-- Slides -->
-     <% property.images.each do |image| %>
-      <%= image_tag image, class: "swiper-slide h-full w-full object-cover object-center lg:h-full lg:w-full" %>
-     <% end %>
-  </div>
-  <!-- If we need navigation buttons -->
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
-
-</div>
+        <div class="relative overflow-hidden rounded-md bg-gray-200">
+        <div class="swiper">
+          <!-- Additional required wrapper -->
+          <div class="swiper-wrapper">
+            <!-- Slides -->
+            <% property.images.each do |image| %>
+              <%= image_tag image, class: "swiper-slide h-full w-full object-cover object-center lg:h-full lg:w-full" %>
+            <% end %>
+        </div>
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
+      <div class="absolute z-10 right-0 top-0 m-4">
+      <svg data-controller="wishlist" data-action="click->wishlist#toggleStatus" data-status="false" class="block h-6 w-6 stroke-white stroke-2 cursor-pointer" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style="display: block; height: 24px; width: 24px; overflow: visible;"><path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path></svg>
+      </div>
+    </div>
         <div class="mt-3 flex font-medium justify-between"> 
           <div>
             <h3 class="text-sm text-gray-700">
@@ -31,7 +35,8 @@
             <p class="mt-1 text-sm text-gray-500">10-15 Dec</p>
             <p class="mt-1 text-sm font-bold text-gray-500"><%=humanized_money_with_symbol(property.price)%></p>
           </div>
-          <p class="text-sm font-medium text-gray-900">4.5</p>
+          <p class="text-sm font-medium text-gray-900">
+           <%= property.average_final_rating.round(2) %></p>
         </div>
       </div>
     <% end %>
