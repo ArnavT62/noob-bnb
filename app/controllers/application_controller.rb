@@ -4,4 +4,5 @@ class ApplicationController < ActionController::Base
   
   # Uncomment the line below to require authentication for all controllers
   # before_action :authenticate_user!
+  
 end
