@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  property: one
+  checkin_date: 2025-12-15
+  checkout_date: 2025-12-15
+
+two:
+  user: two
+  property: two
+  checkin_date: 2025-12-15
+  checkout_date: 2025-12-15
