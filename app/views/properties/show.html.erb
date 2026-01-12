@@ -287,64 +287,7 @@
      <div class="flex item-center justify-between">
        <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"><%= @property.name %></h1>
        <div class="ml-4">
-         <% if user_signed_in? %>
-           <% wishlist = current_user.wishlists.find_by(property: @property) %>
-           <% if wishlist %>
-             <div data-property-id="<%= @property.id %>" data-status="true" data-wishlist-id="<%= wishlist.id %>">
-               <%= button_to wishlist_path(wishlist), 
-                   method: :delete, 
-                   remote: true, 
-                   class: "wishlist-button inline-block border-0 bg-transparent p-0 cursor-pointer" do %>
-               <svg class="block h-8 w-8 stroke-gray-900 stroke-2 cursor-pointer fill-red-500" 
-                    viewBox="0 0 32 32" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    aria-hidden="true" 
-                    role="presentation" 
-                    focusable="false" 
-                    style="display: block; height: 32px; width: 32px; overflow: visible;"
-                    data-wishlist-target="icon"
-                    data-property-id="<%= @property.id %>">
-                 <path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path>
-               </svg>
-             <% end %>
-             </div>
-           <% else %>
-             <div data-property-id="<%= @property.id %>" data-status="false" data-wishlist-id="">
-               <%= button_to wishlists_path, 
-                   method: :post, 
-                   remote: true, 
-                   params: { property_id: @property.id },
-                   class: "wishlist-button inline-block border-0 bg-transparent p-0 cursor-pointer" do %>
-               <svg class="block h-8 w-8 stroke-gray-900 stroke-2 cursor-pointer fill-none" 
-                    viewBox="0 0 32 32" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    aria-hidden="true" 
-                    role="presentation" 
-                    focusable="false" 
-                    style="display: block; height: 32px; width: 32px; overflow: visible;"
-                    data-wishlist-target="icon"
-                    data-property-id="<%= @property.id %>">
-                 <path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path>
-               </svg>
-             <% end %>
-             </div>
-           <% end %>
-         <% else %>
-           <%= link_to new_user_session_path, class: "wishlist-button inline-block" do %>
-             <svg class="block h-8 w-8 stroke-gray-900 stroke-2 cursor-pointer fill-none" 
-                  viewBox="0 0 32 32" 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  aria-hidden="true" 
-                  role="presentation" 
-                  focusable="false" 
-                  style="display: block; height: 32px; width: 32px; overflow: visible;"
-                  data-wishlist-target="icon"
-                  data-property-id="<%= @property.id %>">
-               <path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path>
-             </svg>
-           <% end %>
-         <% end %>
-       </div>
+        <%= render "wishlists/button", property: @property %>
      </div>
      </div>
      </div>

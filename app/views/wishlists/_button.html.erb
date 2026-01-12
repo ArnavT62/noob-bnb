@@ -1,0 +1,31 @@
+<%= turbo_frame_tag "wishlist_#{property.id}", data: { turbo_action: "replace" } do %>
+  <% if user_signed_in? %>
+    <% wishlist = current_user.wishlists.find_by(property: property) %>
+    <% if wishlist %>
+      <%= button_to wishlist_path(wishlist), method: :delete, data: { turbo_frame: "wishlist_#{property.id}", turbo_action: "replace" }, onclick: "event.stopPropagation();", class: "wishlist-button inline-block border-0 bg-transparent p-0 cursor-pointer" do %>
+        <svg class="w-6 h-6 fill-red-500 transition-transform group-hover:scale-110" 
+             viewBox="0 0 24 24" 
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      <% end %>
+    <% else %>
+      <%= button_to wishlists_path, method: :post, params: { property_id: property.id }, data: { turbo_frame: "wishlist_#{property.id}", turbo_action: "replace" }, onclick: "event.stopPropagation();", class: "wishlist-button inline-block border-0 bg-transparent p-0 cursor-pointer" do %>
+        <svg class="w-6 h-6 stroke-gray-900 stroke-2 cursor-pointer fill-none" 
+             viewBox="0 0 24 24" 
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= link_to new_user_session_path, 
+                class: "wishlist-button inline-block border-0 bg-transparent p-0 cursor-pointer" do %>
+      <svg class="w-6 h-6 fill-none stroke-gray-600 stroke-2" 
+           viewBox="0 0 24 24" 
+           xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    <% end %>
+  <% end %>
+<% end %>

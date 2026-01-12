@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   #   resources :wishlists, only: [:create, :destroy]
   # end
   resources :wishlists, only: [:create, :destroy]
-
   resources :properties, only: [:show]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
