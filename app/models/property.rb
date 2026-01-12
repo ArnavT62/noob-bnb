@@ -23,4 +23,20 @@ class Property < ApplicationRecord
         return if user.nil?
         wishlisted_users.include?(user)
     end
+
+    def available_dates
+        next_reservation= reservations.upcoming_reservations.first
+        current_reservation= reservations.current_reservations.first
+
+        if current_reservation.nil? && next_reservation.nil?
+            Date.tomorrow..Date.tomorrow+30.days
+        elsif current_reservation.nil? 
+            Date.tomorrow..next_reservation.checkin_date
+        elsif next_reservation.nil?
+            current_reservation.checkout_date..Date.tomorrow+30.days
+        else
+            current_reservation.checkout_date..next_reservation.checkin_date
+        end
+        
+    end
 end

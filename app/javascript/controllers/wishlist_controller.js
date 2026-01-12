@@ -1,18 +1,23 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static targets = [ "icon" ]
   connect() {
     console.log("Wishlist controller connected")
   }
 
-  toggleStatus() {
+  toggleStatus(event) {
+    // Prevent navigation when clicking wishlist on homepage
+    event.preventDefault()
+    event.stopPropagation()
 
     const userLoggedIn = this.element.dataset.userLoggedIn
     if(userLoggedIn === "false") {
-     document.querySelector(".js-login").click()
+     window.location.href = "/users/sign_in"
       return
     }
-    if(this.element.dataset.status === "false") {
+    const status = this.element.dataset.status
+    if(status === "false" || !status || status === "") {
     const propertyId = this.element.dataset.propertyId
     const userId = this.element.dataset.userId
     console.log(propertyId, userId);
@@ -47,15 +52,22 @@ export default class extends Controller {
       .then(data=>{
         console.log(data);
         // Update UI to reflect wishlist was added
-        this.element.classList.remove("fill-none")
-        this.element.classList.add("fill-red-500")
+        this.iconTarget.classList.remove("fill-none")
+        this.iconTarget.classList.add("fill-red-500")
         this.element.dataset.status = "true"
+        if (data && data.id) {
+          this.element.dataset.wishlistId = data.id
+        }
       })
       .catch(error=>{
         console.error(error);
       })
   }
   removePropertyFromWishlist(wishlistId) {
+    if (!wishlistId) {
+      console.warn("No wishlist id present, skipping delete");
+      return;
+    }
     const params={
       id: wishlistId,
     }
@@ -78,8 +90,8 @@ export default class extends Controller {
   .then(data=>{
     console.log("Wishlist removed successfully");
     // Update UI to reflect wishlist was removed
-    this.element.classList.add("fill-none")
-    this.element.classList.remove("fill-red-500")
+    this.iconTarget.classList.add("fill-none")
+    this.iconTarget.classList.remove("fill-red-500")
     this.element.dataset.status = "false"
   })
   .catch(error=>{

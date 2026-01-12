@@ -4,7 +4,8 @@
 
     <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
     <% @properties.each do |property| %>
-      <div class="group relative">
+      <%= link_to property_path(property) do%>
+      <div class="group relative cursor-pointer">
         <!-- Slider main container -->
         <div class="relative overflow-hidden rounded-md bg-gray-200">
         <div class="swiper">
@@ -18,36 +19,85 @@
         <!-- If we need navigation buttons -->
         <div class="swiper-button-prev"></div>
         <div class="swiper-button-next"></div>
-      </div>
-      <div class="absolute z-10 right-0 top-0 m-4">
-      <svg data-controller="wishlist" 
-      data-action="click->wishlist#toggleStatus" 
-      data-status="<%= property.wishlisted_by?(current_user) %>" 
-      data-user-logged-in="<%= user_signed_in? %>"
-      data-property-id="<%=property.id%>"
-      data-user-id="<%=current_user&.id%>"
-      data-wishlist-id="<%= property.wishlists.find_by(user: current_user)&.id %>"
-      class="block h-6 w-6 stroke-white stroke-2 cursor-pointer <%= property.wishlisted_by?(current_user) ? "fill-red-500" : "fill-none" %>" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation" focusable="false" style="display: block; height: 24px; width: 24px; overflow: visible;"><path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path></svg>
+           
+        </div>
+      <div class="absolute z-10 right-0 top-0 m-4" onclick="event.stopPropagation();">
+        <% if user_signed_in? %>
+          <% wishlist = current_user.wishlists.find_by(property: property) %>
+          <% if wishlist %>
+            <div data-property-id="<%= property.id %>" data-status="true" data-wishlist-id="<%= wishlist.id %>">
+              <%= button_to wishlist_path(wishlist), 
+                  method: :delete, 
+                  remote: true, 
+                  class: "wishlist-button inline-block border-0 bg-transparent p-0 cursor-pointer" do %>
+                <svg class="block h-6 w-6 stroke-white stroke-2 cursor-pointer fill-red-500" 
+                     viewBox="0 0 32 32" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     aria-hidden="true" 
+                     role="presentation" 
+                     focusable="false" 
+                     style="display: block; height: 24px; width: 24px; overflow: visible;"
+                     data-wishlist-target="icon"
+                     data-property-id="<%= property.id %>">
+                  <path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path>
+                </svg>
+              <% end %>
+            </div>
+          <% else %>
+            <div data-property-id="<%= property.id %>" data-status="false" data-wishlist-id="">
+              <%= button_to wishlists_path, 
+                  method: :post, 
+                  remote: true, 
+                  params: { property_id: property.id },
+                  class: "wishlist-button inline-block border-0 bg-transparent p-0 cursor-pointer" do %>
+                <svg class="block h-6 w-6 stroke-white stroke-2 cursor-pointer fill-none" 
+                     viewBox="0 0 32 32" 
+                     xmlns="http://www.w3.org/2000/svg" 
+                     aria-hidden="true" 
+                     role="presentation" 
+                     focusable="false" 
+                     style="display: block; height: 24px; width: 24px; overflow: visible;"
+                     data-wishlist-target="icon"
+                     data-property-id="<%= property.id %>">
+                  <path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path>
+                </svg>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <%= link_to new_user_session_path, class: "wishlist-button inline-block" do %>
+            <svg class="block h-6 w-6 stroke-white stroke-2 cursor-pointer fill-none" 
+                 viewBox="0 0 32 32" 
+                 xmlns="http://www.w3.org/2000/svg" 
+                 aria-hidden="true" 
+                 role="presentation" 
+                 focusable="false" 
+                 style="display: block; height: 24px; width: 24px; overflow: visible;"
+                 data-wishlist-target="icon"
+                 data-property-id="<%= property.id %>">
+              <path d="m15.9998 28.6668c7.1667-4.8847 14.3334-10.8844 14.3334-18.1088 0-1.84951-.6993-3.69794-2.0988-5.10877-1.3996-1.4098-3.2332-2.11573-5.0679-2.11573-1.8336 0-3.6683.70593-5.0668 2.11573l-2.0999 2.11677-2.0988-2.11677c-1.3995-1.4098-3.2332-2.11573-5.06783-2.11573-1.83364 0-3.66831.70593-5.06683 2.11573-1.39955 1.41083-2.09984 3.25926-2.09984 5.10877 0 7.2244 7.16667 13.2241 14.3333 18.1088z"></path>
+            </svg>
+          <% end %>
+        <% end %>
       </div>
     </div>
         <div class="mt-3 flex font-medium justify-between"> 
           <div>
             <h3 class="text-sm text-gray-700">
-              <a href="#">
-                <span aria-hidden="true" "absolute inset-0"></span>
+       
                 <%= property.name %>
-              </a>
+             
             </h3>
             <p class="mt-1 text-sm text-gray-500">Hosted by Arnav</p>
-            <p class="mt-1 text-sm text-gray-500">10-15 Dec</p>
+            <p class="mt-1 text-sm text-gray-500"><%= property.available_dates.first.strftime("%b %d") %> - <%= property.available_dates.last.strftime("%b %d") %></p>
             <p class="mt-1 text-sm font-bold text-gray-500"><%=humanized_money_with_symbol(property.price)%></p>
           </div>
           <p class="text-sm font-medium text-gray-900">
-           <%= property.average_final_rating.round(2) %></p>
+           <%= property.average_final_rating&.round(2) || "N/A" %></p>
         </div>
       </div>
+      <% end %>
     <% end %>
-      
 
       <!-- More products... -->
     </div>

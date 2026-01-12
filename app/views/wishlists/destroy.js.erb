@@ -1,0 +1,30 @@
+(function(){ 
+    var button = document.querySelector('form[action*="wishlists"][data-property-id="<%= @property.id %>"]');
+    if (!button) {
+        button = document.querySelector('[data-property-id="<%= @property.id %>"]');
+    }
+    if (button) {
+        var icon = button.querySelector('[data-wishlist-target="icon"]');
+        if (icon) {
+            icon.classList.remove("fill-red-500");
+            icon.classList.add("fill-none");
+            button.dataset.status = "false";
+            button.dataset.wishlistId = "";
+        
+            button.action = '<%= wishlists_path %>';
+            var methodInput = button.querySelector('input[name="_method"]');
+            if (methodInput) {
+                methodInput.value = 'post';
+            }
+            var propertyIdInput = button.querySelector('input[name="property_id"]');
+            if (!propertyIdInput) {
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = 'property_id';
+                hiddenInput.value = '<%= @property.id %>';
+                button.appendChild(hiddenInput);
+            }
+        }
+    }
+    console.log("removed from wishlist");
+})();
