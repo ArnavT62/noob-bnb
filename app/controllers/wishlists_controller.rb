@@ -24,7 +24,6 @@
             @wishlist = current_user.wishlists.find_or_create_by(property: @property)
             respond_to do |format|
                 format.turbo_stream
-                format.html { redirect_to @property, notice: "Property added to wishlist" }
             end
         end
         def destroy
@@ -33,7 +32,6 @@
            @wishlist.destroy
            respond_to do |format|
                 format.turbo_stream
-                format.html { redirect_to @property, notice: "Property removed from wishlist" }
            end
         end
     end
