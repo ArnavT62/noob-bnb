@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :admin, controllers: { sessions: 'admin/sessions' }
   devise_for :users
   root "home#index"
   # namespace :api do
@@ -6,6 +7,9 @@ Rails.application.routes.draw do
   # end
   resources :wishlists, only: [:create, :destroy]
   resources :properties, only: [:show]
+  namespace :admin do 
+    resources :properties
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

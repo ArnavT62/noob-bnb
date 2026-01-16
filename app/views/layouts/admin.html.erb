@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= "Admin Panel | NooBnB" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag "tailwind", "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-50">
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex">
+            <div class="flex-shrink-0 flex items-center">
+              <h1 class="text-xl font-bold text-gray-900">Admin Panel</h1>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <%= link_to "Properties", admin_properties_path, 
+                  class: "inline-flex items-center px-1 pt-1 border-b-2 border-indigo-500 text-sm font-medium text-gray-900" %>
+            </div>
+          </div>
+          <div class="flex items-center">
+            <%= link_to "Back to Site", root_path, class: "text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium" %>
+            <%= link_to "Logout", destroy_admin_session_path, method: :delete, 
+                class: "ml-4 bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700" %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="py-6">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <% if notice %>
+          <div class="rounded-md bg-green-50 p-4 mb-4">
+            <div class="flex">
+              <div class="ml-3">
+                <p class="text-sm font-medium text-green-800"><%= notice %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <% if alert %>
+          <div class="rounded-md bg-red-50 p-4 mb-4">
+            <div class="flex">
+              <div class="ml-3">
+                <p class="text-sm font-medium text-red-800"><%= alert %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>
+
+
