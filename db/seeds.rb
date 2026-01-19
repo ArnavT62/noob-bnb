@@ -29,26 +29,14 @@ user = User.create({
       bedroom_count: (1..5).to_a.sample,
       bed_count: (1..10).to_a.sample
     })
-    property.images.attach(io: File.open("db/images/property_#{i+1}.jpeg"), filename: property.name)
-    property.images.attach(io: File.open("db/images/property_#{7}.jpeg"), filename: property.name)
-    property.images.attach(io: File.open("db/images/property_#{8}.jpeg"), filename: property.name)
-    property.images.attach(io: File.open("db/images/property_#{9}.jpeg"), filename: property.name)
-    property.images.attach(io: File.open("db/images/property_#{10}.jpeg"), filename: property.name)
-    property.images.attach(io: File.open("db/images/property_#{11}.jpeg"), filename: property.name)
-    property.images.attach(io: File.open("db/images/property_#{12}.jpeg"), filename: property.name)
-
-
-    ((5..10).to_a.sample).times do 
-      Review.create({
-        content: Faker::Lorem.paragraph(sentence_count: 10),
-        cleanliness_rating: (1..5).to_a.sample,
-        accuracy_rating: (1..5).to_a.sample,
-        checkin_rating: (1..5).to_a.sample,
-        communication_rating: (1..5).to_a.sample,
-        location_rating: (1..5).to_a.sample,
-        value_rating: (1..5).to_a.sample,
-        property: property,
-        user: user,
-      })
+    # Attach images if they exist (optional - images can be added via admin panel)
+    image_files = Dir.glob("db/images/property_*.jpeg")
+    if image_files.any?
+      # Attach a few random images from available files
+      image_files.sample([image_files.length, 4].min).each do |image_path|
+        property.images.attach(io: File.open(image_path), filename: File.basename(image_path))
+      end
     end
+
+
   end

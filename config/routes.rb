@@ -6,7 +6,10 @@ Rails.application.routes.draw do
   #   resources :wishlists, only: [:create, :destroy]
   # end
   resources :wishlists, only: [:create, :destroy]
-  resources :properties, only: [:show]
+  resources :properties, only: [:show] do
+    resources :reviews, only: [:create]
+  end
+          
   namespace :admin do 
     resources :properties
   end

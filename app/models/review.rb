@@ -8,7 +8,7 @@ class Review < ApplicationRecord
   validates :communication_rating, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 5 }
   validates :location_rating, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 5 }
   validates :value_rating, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 5 }
-  
+  validates :user_id, uniqueness: { scope: :property_id, message: "has already reviewed this property" }
   after_commit :update_final_rating, on: [:create, :update]
   
   def update_final_rating

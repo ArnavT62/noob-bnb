@@ -29,7 +29,7 @@
               <h3 class="text-sm text-gray-700">
                 <%= property.name %>
               </h3>
-              <p class="mt-1 text-sm text-gray-500">Hosted by Arnav</p>
+              <p class="mt-1 text-sm text-gray-500">Hosted by <%= property.host_name %></p>
               <p class="mt-1 text-sm text-gray-500"><%= property.available_dates.first.strftime("%b %d") %> - <%= property.available_dates.last.strftime("%b %d") %></p>
               <p class="mt-1 text-sm font-bold text-gray-500"><%=humanized_money_with_symbol(property.price)%></p>
             </div>

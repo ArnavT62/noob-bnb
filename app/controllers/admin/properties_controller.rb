@@ -15,7 +15,9 @@ class Admin::PropertiesController < ApplicationController
 
     def create
         @property = Property.new(property_params)
-    @property.price = Money.from_amount(property_params[:price].to_f, "USD") if property_params[:price].present?
+        if property_params[:price].present? && property_params[:price].to_f > 0
+          @property.price = Money.from_amount(property_params[:price].to_f, "USD")
+        end
         if @property.save
             redirect_to admin_properties_path, notice: "Property created successfully"
     else
@@ -30,7 +32,7 @@ class Admin::PropertiesController < ApplicationController
     def update
         @property = Property.find(params[:id])
     update_params = property_params.dup
-    if update_params[:price].present?
+    if update_params[:price].present? && update_params[:price].to_f > 0
       @property.price = Money.from_amount(update_params[:price].to_f, "USD")
       update_params.delete(:price)
     end
@@ -54,6 +56,7 @@ class Admin::PropertiesController < ApplicationController
       :name,
       :headline,
       :description,
+      :host_name,
       :address_1,
       :address_2,
       :city,

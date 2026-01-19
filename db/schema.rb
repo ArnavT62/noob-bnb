@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_15_052236) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_19_053840) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,25 +54,26 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_15_052236) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
-    create_table "properties", force: :cascade do |t|
-      t.string "name"
-      t.string "headline"
-      t.text "description"
-      t.string "address_1"
-      t.string "address_2"
-      t.string "city"
-      t.string "state"
-      t.string "country"
-      t.datetime "created_at", null: false
-      t.datetime "updated_at", null: false
-      t.integer "price_cents"
-      t.string "price_currency"
-      t.integer "reviews_count"
-      t.decimal "average_final_rating"
-      t.integer "guest_count", default: 0
-      t.integer "bedroom_count", default: 0
-      t.integer "bed_count", default: 0
-    end
+  create_table "properties", force: :cascade do |t|
+    t.string "name"
+    t.string "headline"
+    t.text "description"
+    t.string "host_name"
+    t.string "address_1"
+    t.string "address_2"
+    t.string "city"
+    t.string "state"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "price_cents"
+    t.string "price_currency"
+    t.integer "reviews_count"
+    t.decimal "average_final_rating"
+    t.integer "guest_count", default: 0
+    t.integer "bedroom_count", default: 0
+    t.integer "bed_count", default: 0
+  end
 
   create_table "reservations", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -111,6 +112,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_15_052236) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "address_1"
+    t.string "address_2"
+    t.string "city"
+    t.string "state"
+    t.string "country"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
