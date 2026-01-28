@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :admin, controllers: { sessions: 'admin/sessions' }
+  devise_for :admins, controllers: { sessions: 'admins/sessions' }
   devise_for :users
   root "home#index"
   # namespace :api do
@@ -8,9 +8,14 @@ Rails.application.routes.draw do
   resources :wishlists, only: [:create, :destroy]
   resources :properties, only: [:show] do
     resources :reviews, only: [:create]
+    resources :reservations, only: [:new, :create] do
+      collection do
+        post :preview
+      end
+    end
   end
-          
-  namespace :admin do 
+  resources :reservations, only: [:index, :show, :destroy]
+  namespace :admins do 
     resources :properties
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

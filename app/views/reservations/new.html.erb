@@ -1,0 +1,106 @@
+<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">Book Your Stay</h1>
+    <p class="mt-2 text-lg text-gray-600"><%= @property.name %></p>
+    <p class="text-sm text-gray-500"><%= @property.address_1 %>, <%= @property.city %>, <%= @property.state %></p>
+  </div>
+
+  <% if flash[:alert] %>
+    <div class="mb-6 rounded-md bg-red-50 p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm font-medium text-red-800"><%= flash[:alert] %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%= form_with model: [@property, @reservation], url: preview_property_reservations_path(@property), method: :post, local: true, data: { turbo: false }, class: "space-y-6" do |f| %>
+    <div class="bg-white shadow-sm rounded-lg p-6 space-y-6">
+      <h2 class="text-xl font-semibold text-gray-900">Booking Details</h2>
+      
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <%= f.label :checkin_date, "Check-in Date", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.date_field :checkin_date, 
+              min: Date.today.to_s,
+              class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+              required: true %>
+        </div>
+
+        <div>
+          <%= f.label :checkout_date, "Check-out Date", class: "block text-sm font-medium text-gray-700 mb-2" %>
+          <%= f.date_field :checkout_date,
+              min: Date.today.to_s,
+              class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+              required: true %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :guest_count, "Number of Guests", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.number_field :guest_count,
+            min: 1,
+            max: @property.guest_count,
+            class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+            required: true %>
+        <p class="mt-1 text-sm text-gray-500">Maximum <%= @property.guest_count %> guests</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+        <input type="email" 
+            value="<%= current_user.email %>"
+            readonly
+            disabled
+            class="block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm" />
+      </div>
+
+      <div>
+        <%= f.label :phone_number, "Phone Number", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :phone_number,
+            pattern: "[0-9]{10}",
+            maxlength: 10,
+            placeholder: "10 digits",
+            class: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+            required: true %>
+        <p class="mt-1 text-sm text-gray-500">10 digits only</p>
+      </div>
+    </div>
+
+    <!-- Price Preview (calculated on frontend) -->
+    <% if @reservation.checkin_date.present? && @reservation.checkout_date.present? && @reservation.number_of_nights > 0 %>
+      <div class="bg-gray-50 rounded-lg p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Price Summary</h3>
+        <div class="space-y-2">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">Price per night:</span>
+            <span class="font-medium text-gray-900">
+              <%= humanized_money_with_symbol(@property.price) %>
+            </span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">Number of nights:</span>
+            <span class="font-medium text-gray-900"><%= @reservation.number_of_nights %></span>
+          </div>
+          <div class="border-t border-gray-300 pt-2 mt-2">
+            <div class="flex justify-between">
+              <span class="text-lg font-semibold text-gray-900">Total:</span>
+              <span class="text-lg font-bold text-indigo-600"><%= humanized_money_with_symbol(@reservation.total_price) %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="flex justify-end space-x-4">
+      <%= link_to "Cancel", property_path(@property), class: "px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      <%= f.submit "Confirm Details", class: "px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    </div>
+  <% end %>
+</div>

@@ -72,11 +72,12 @@
             <!-- Active: "bg-gray-100", Not Active: "" -->
             <% if user_signed_in? %>
             <div class="block px-4 py-2 text-sm text-gray-700">Logged in as <%= current_user.email %></div>
-             <%= link_to "Log Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-gray-700" %>
+            <%= link_to "My Bookings", reservations_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+             <%= link_to "Log Out", destroy_user_session_path, data: { turbo_method: :delete }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
   
             <% else %>
-            <%= link_to "Login", new_user_session_path, class: "js-login block px-4 py-2 text-sm text-gray-700" %>
-            <%= link_to "Sign Up", new_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700" %>
+            <%= link_to "Login", new_user_session_path, class: "js-login block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
             <% end %>
           </div>
         </div>

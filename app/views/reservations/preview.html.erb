@@ -1,0 +1,107 @@
+<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">Review Your Booking</h1>
+    <p class="mt-2 text-lg text-gray-600">Please review your booking details before confirming</p>
+  </div>
+
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+    <!-- Property Information -->
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-2"><%= @property.name %></h2>
+      <p class="text-gray-600"><%= @property.address_1 %>, <%= @property.city %>, <%= @property.state %></p>
+      <% if @property.images.attached? %>
+        <div class="mt-4">
+          <%= image_tag @property.images.first, class: "h-48 w-full object-cover rounded-lg" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Booking Details -->
+    <div class="p-6 space-y-6">
+      <h3 class="text-xl font-semibold text-gray-900">Booking Details</h3>
+      
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Check-in Date</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.checkin_date.strftime("%B %d, %Y") %></p>
+        </div>
+        
+        <div>
+          <p class="text-sm font-medium text-gray-500">Check-out Date</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.checkout_date.strftime("%B %d, %Y") %></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Number of Nights</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.number_of_nights %> night<%= @reservation.number_of_nights != 1 ? 's' : '' %></p>
+        </div>
+        
+        <div>
+          <p class="text-sm font-medium text-gray-500">Number of Guests</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.guest_count %> guest<%= @reservation.guest_count != 1 ? 's' : '' %></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Email</p>
+          <p class="mt-1 text-lg text-gray-900"><%= current_user.email %></p>
+        </div>
+        
+        <div>
+          <p class="text-sm font-medium text-gray-500">Phone Number</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.phone_number %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price Summary -->
+    <div class="p-6 bg-gray-50 border-t border-gray-200">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Price Summary</h3>
+      <div class="space-y-3">
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600">Price per night:</span>
+          <span class="font-medium text-gray-900"><%= humanized_money_with_symbol(@property.price) %></span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600">Number of nights:</span>
+          <span class="font-medium text-gray-900"><%= @reservation.number_of_nights %></span>
+        </div>
+        <div class="border-t border-gray-300 pt-3 mt-3">
+          <div class="flex justify-between">
+            <span class="text-lg font-semibold text-gray-900">Total:</span>
+            <span class="text-2xl font-bold text-indigo-600"><%= humanized_money_with_symbol(@reservation.total_price) %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="mt-8 flex justify-between">
+    <%= form_with url: new_property_reservation_path(@property), method: :get, local: true do |f| %>
+      <%= hidden_field_tag "reservation[checkin_date]", @reservation.checkin_date %>
+      <%= hidden_field_tag "reservation[checkout_date]", @reservation.checkout_date %>
+      <%= hidden_field_tag "reservation[guest_count]", @reservation.guest_count %>
+      <%= hidden_field_tag "reservation[phone_number]", @reservation.phone_number %>
+      <%= f.submit "Edit Details", class: "px-6 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    <% end %>
+
+    <div class="flex space-x-4">
+      <button type="button" disabled class="px-6 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-400 bg-gray-100 cursor-not-allowed">
+        Make Payment
+      </button>
+      
+      <%= form_with model: [@property, @reservation], url: property_reservations_path(@property), method: :post, local: true do |f| %>
+        <%= f.hidden_field :checkin_date, value: @reservation.checkin_date %>
+        <%= f.hidden_field :checkout_date, value: @reservation.checkout_date %>
+        <%= f.hidden_field :guest_count, value: @reservation.guest_count %>
+        <%= f.hidden_field :phone_number, value: @reservation.phone_number %>
+        <%= f.submit "Complete Booking", class: "px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      <% end %>
+    </div>
+  </div>
+</div>
+

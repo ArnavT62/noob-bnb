@@ -1,0 +1,88 @@
+<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">My Bookings</h1>
+    <p class="mt-2 text-lg text-gray-600">View and manage your property reservations</p>
+  </div>
+
+  <% if @reservations.any? %>
+    <div class="space-y-6">
+      <% @reservations.each do |reservation| %>
+        <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+          <div class="p-6">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+              <div class="flex-1">
+                <div class="flex items-start justify-between">
+                  <div>
+                    <h3 class="text-xl font-semibold text-gray-900">
+                      <%= link_to reservation.property.name, property_path(reservation.property), class: "hover:text-indigo-600" %>
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                      <%= reservation.property.address_1 %>, <%= reservation.property.city %>, <%= reservation.property.state %>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Check-in</p>
+                    <p class="mt-1 text-base text-gray-900"><%= reservation.checkin_date.strftime("%B %d, %Y") %></p>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Check-out</p>
+                    <p class="mt-1 text-base text-gray-900"><%= reservation.checkout_date.strftime("%B %d, %Y") %></p>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Guests</p>
+                    <p class="mt-1 text-base text-gray-900"><%= reservation.guest_count %></p>
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Nights</p>
+                    <p class="mt-1 text-base text-gray-900">
+                      <% nights = reservation.number_of_nights %>
+                      <%= nights %> night<%= nights != 1 ? 's' : '' %>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-center space-x-4">
+                  <div>
+                    <p class="text-sm font-medium text-gray-500">Total Price</p>
+                    <p class="mt-1 text-lg font-semibold text-indigo-600">
+                      <% 
+                        nights = reservation.number_of_nights
+                        total_price = reservation.total_price
+                      %>
+                      <%= humanized_money_with_symbol(total_price) %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <%= button_to "Cancel", 
+              reservation_path(reservation), 
+              method: :delete, 
+              form: { data: { turbo_confirm: "Are you sure you want to cancel this reservation?" } },
+              class: "px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700" %>
+              <% if reservation.property.images.attached? %>
+                <div class="mt-4 sm:mt-0 sm:ml-6">
+                  <%= image_tag reservation.property.images.first, class: "h-32 w-48 object-cover rounded-lg" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white shadow-sm rounded-lg p-12 text-center">
+      <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      <h3 class="mt-2 text-sm font-medium text-gray-900">No bookings</h3>
+      <p class="mt-1 text-sm text-gray-500">Get started by booking your first property.</p>
+      <div class="mt-6">
+        <%= link_to "Browse Properties", root_path, class: "inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_19_053840) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_20_043838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -82,6 +82,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_19_053840) do
     t.date "checkout_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "guest_count"
+    t.string "phone_number"
     t.index ["property_id"], name: "index_reservations_on_property_id"
     t.index ["user_id", "property_id", "checkin_date", "checkout_date"], name: "idx_on_user_id_property_id_checkin_date_checkout_da_7282e2dfd7", unique: true
     t.index ["user_id"], name: "index_reservations_on_user_id"

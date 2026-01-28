@@ -14,6 +14,10 @@ user = User.create({
   email: 'test@example.com',
   password: 'password'
 })
+admin = Admin.create({
+  email: 'admin@example.com',
+  password: 'password'
+})
 6.times do |i|
    property =  Property.create({
       name: Faker::Address.full_address,

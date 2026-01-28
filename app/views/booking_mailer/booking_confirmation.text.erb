@@ -1,0 +1,35 @@
+Booking Confirmation
+====================
+
+Dear <%= @user.email %>,
+
+Thank you for your booking! We're excited to host you at <%= @property.name %>.
+
+BOOKING SUMMARY
+---------------
+Reservation ID: #<%= @reservation.id %>
+Property: <%= @property.name %>
+Location: <%= @property.city %>, <%= @property.state %>
+Check-in: <%= @reservation.checkin_date.strftime("%B %d, %Y") %>
+Check-out: <%= @reservation.checkout_date.strftime("%B %d, %Y") %>
+Number of Nights: <%= @reservation.number_of_nights %> night<%= @reservation.number_of_nights != 1 ? 's' : '' %>
+Number of Guests: <%= @reservation.guest_count %> guest<%= @reservation.guest_count != 1 ? 's' : '' %>
+Total Price: <%= humanized_money_with_symbol(@reservation.total_price) %>
+
+GUEST CONTACT INFORMATION
+-------------------------
+Email: <%= @user.email %>
+Phone: <%= @reservation.phone_number %>
+
+IMPORTANT: A detailed PDF confirmation has been attached to this email. Please save it for your records.
+
+If you have any questions or need to make changes to your booking, please don't hesitate to contact us.
+
+We look forward to hosting you!
+
+Best regards,
+<%= @property.host_name %>
+<%= @property.name %>
+
+---
+This is an automated confirmation email. Please do not reply to this message.

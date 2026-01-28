@@ -44,14 +44,17 @@ Rails.application.configure do
   # config.action_mailer.delivery_method = :letter_opener
   # Or use SMTP for development
   config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  
   config.action_mailer.smtp_settings = {
-    address: ENV['SMTP_ADDRESS'] || 'localhost',
-    port: ENV['SMTP_PORT'] || 587,
-    domain: ENV['SMTP_DOMAIN'] || 'localhost',
-    user_name: ENV['SMTP_USERNAME'],
-    password: ENV['SMTP_PASSWORD'],
-    authentication: ENV['SMTP_AUTHENTICATION']&.to_sym || :plain,
-    enable_starttls_auto: ENV['SMTP_ENABLE_STARTTLS_AUTO'] != 'false'
+    address: 'smtp.gmail.com',
+    port: 587,
+    domain: 'gmail.com',
+    user_name: Figaro.env.gmail_username,
+    password: Figaro.env.gmail_password,
+    authentication: 'plain',
+    enable_starttls_auto: true
   }
 
   # Print deprecation notices to the Rails logger.

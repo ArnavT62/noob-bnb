@@ -1,0 +1,112 @@
+<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+  <% if notice %>
+    <div class="mb-6 rounded-md bg-green-50 p-4">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm font-medium text-green-800"><%= notice %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900">Booking Confirmed</h1>
+    <p class="mt-2 text-lg text-gray-600">Your reservation has been successfully created</p>
+  </div>
+
+  <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+    <!-- Property Information -->
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-2">
+        <%= link_to @reservation.property.name, property_path(@reservation.property), class: "hover:text-indigo-600" %>
+      </h2>
+      <p class="text-gray-600"><%= @reservation.property.address_1 %>, <%= @reservation.property.city %>, <%= @reservation.property.state %></p>
+      <% if @reservation.property.images.attached? %>
+        <div class="mt-4">
+          <%= image_tag @reservation.property.images.first, class: "h-48 w-full object-cover rounded-lg" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Booking Details -->
+    <div class="p-6 space-y-6">
+      <h3 class="text-xl font-semibold text-gray-900">Booking Details</h3>
+      
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Check-in Date</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.checkin_date.strftime("%B %d, %Y") %></p>
+        </div>
+        
+        <div>
+          <p class="text-sm font-medium text-gray-500">Check-out Date</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.checkout_date.strftime("%B %d, %Y") %></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Number of Nights</p>
+          <p class="mt-1 text-lg text-gray-900">
+            <%= (@reservation.checkout_date - @reservation.checkin_date).to_i %> night<%= (@reservation.checkout_date - @reservation.checkin_date).to_i != 1 ? 's' : '' %>
+          </p>
+        </div>
+        
+        <div>
+          <p class="text-sm font-medium text-gray-500">Number of Guests</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.guest_count %> guest<%= @reservation.guest_count != 1 ? 's' : '' %></p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div>
+          <p class="text-sm font-medium text-gray-500">Email</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.user.email %></p>
+        </div>
+        
+        <div>
+          <p class="text-sm font-medium text-gray-500">Phone Number</p>
+          <p class="mt-1 text-lg text-gray-900"><%= @reservation.phone_number %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price Summary -->
+    <div class="p-6 bg-gray-50 border-t border-gray-200">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4">Price Summary</h3>
+      <div class="space-y-3">
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600">Price per night:</span>
+          <span class="font-medium text-gray-900"><%= humanized_money_with_symbol(@reservation.property.price) %></span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-gray-600">Number of nights:</span>
+          <span class="font-medium text-gray-900"><%= @reservation.number_of_nights %></span>
+        </div>
+        <div class="border-t border-gray-300 pt-3 mt-3">
+          <div class="flex justify-between">
+            <span class="text-lg font-semibold text-gray-900">Total:</span>
+            <span class="text-2xl font-bold text-indigo-600">
+              <% 
+                nights = @reservation.number_of_nights
+                total_price = @reservation.total_price
+              %>
+              <%= humanized_money_with_symbol(@reservation.total_price) %>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 flex justify-end space-x-4">
+    <%= link_to "View All Bookings", reservations_path, class: "px-6 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    <%= link_to "Back to Property", property_path(@reservation.property), class: "px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+  </div>
+</div>
+

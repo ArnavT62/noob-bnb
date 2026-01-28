@@ -1,4 +1,4 @@
-class Admin::PropertiesController < ApplicationController
+class Admins::PropertiesController < ApplicationController
   layout "admin"
   before_action :authenticate_admin!
     def index
@@ -19,7 +19,7 @@ class Admin::PropertiesController < ApplicationController
           @property.price = Money.from_amount(property_params[:price].to_f, "USD")
         end
         if @property.save
-            redirect_to admin_properties_path, notice: "Property created successfully"
+            redirect_to admins_properties_path, notice: "Property created successfully"
     else
       render :new, status: :unprocessable_entity
         end
@@ -32,12 +32,20 @@ class Admin::PropertiesController < ApplicationController
     def update
         @property = Property.find(params[:id])
     update_params = property_params.dup
+    
+    # Only update images if new images are actually provided
+    # If images is an empty array or nil, remove it to preserve existing images
+    if update_params[:images].blank? || (update_params[:images].is_a?(Array) && update_params[:images].all?(&:blank?))
+      update_params.delete(:images)
+    end
+    
     if update_params[:price].present? && update_params[:price].to_f > 0
       @property.price = Money.from_amount(update_params[:price].to_f, "USD")
       update_params.delete(:price)
     end
+    
     if @property.update(update_params)
-            redirect_to admin_properties_path, notice: "Property updated successfully"
+            redirect_to admins_properties_path, notice: "Property #{@property.name} updated successfully"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -46,7 +54,7 @@ class Admin::PropertiesController < ApplicationController
     def destroy
         @property = Property.find(params[:id])
         @property.destroy
-        redirect_to admin_properties_path, notice: "Property deleted successfully"
+        redirect_to admins_properties_path, notice: "Property #{@property.name} deleted successfully"
     end
     
   private
