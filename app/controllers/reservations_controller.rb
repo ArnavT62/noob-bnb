@@ -53,8 +53,7 @@ class ReservationsController < ApplicationController
         @reservation.property = @property
         
         if @reservation.save
-            # Send booking confirmation email asynchronously
-            BookingConfirmationJob.perform_later(@reservation)
+            BookingMailer.booking_confirmation(@reservation).deliver_now
             redirect_to reservation_path(@reservation), notice: "Reservation created successfully"
         else
             flash.now[:alert] = @reservation.errors.full_messages.join(", ")
